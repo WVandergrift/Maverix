@@ -3,6 +3,66 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
+  .controller('ApiTestCtrl', ['$scope', '$http', function ($scope, $http) {
+    $scope.$parent.title = "API Test";
+    $scope.$parent.img = "img/iconset-addictive-flavour-set/png/chart.png";
+    $scope.$parent.showTopToggle = false;
+    $scope.apiRequest = {};
+    $scope.apiRequest.url = "https://";
+    $scope.apiRequest.type = "";
+    $scope.apiRequest.result = {};
+    $scope.apiRequest.status = 0;
+    $scope.trackedList = {};
+    $scope.apiRequest.trackedObjects = [];
+
+    $scope.callAPI = function(){
+      $scope.apiRequest.result = {};
+      $scope.apiRequest.trackedObjects = [];
+
+      $http.get($scope.apiRequest.url).
+        success(function(data, status, headers, config) {
+          $scope.apiRequest.result = data;
+          $scope.apiRequest.type = config.method;
+          $scope.apiRequest.status = status;
+          $scope.updateTrackedObject();
+        })
+        .error(function(data, status, headers, config) {
+          $scope.apiRequest.result = data;
+          $scope.apiRequest.type = config.method;
+          $scope.apiRequest.status = status;
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+        });
+    };
+
+    $scope.updateTrackedObject = function(){
+      $scope.apiRequest.trackedObjects = [];
+      angular.forEach($scope.trackedList, function(value, key){
+        var newTrackedObject = {};
+        newTrackedObject.key = value;
+        newTrackedObject.value = Object.byString($scope.apiRequest.result, value);
+
+        $scope.apiRequest.trackedObjects.push(newTrackedObject);
+        console.log(angular.toJson($scope.apiRequest.trackedObjects));
+      });
+    };
+
+
+    Object.byString = function(o, s) {
+      s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+      s = s.replace(/^\./, '');           // strip a leading dot
+      var a = s.split('.');
+      for (var i = 0, n = a.length; i < n; ++i) {
+        var k = a[i];
+        if (k in o) {
+          o = o[k];
+        } else {
+          return;
+        }
+      }
+      return o;
+    }
+  }])
     .controller('MaverixCtrl', ['$scope', function ($scope) {
         $scope.$parent.title = "Maverix Theme Guide";
         $scope.$parent.img = "img/iconset-addictive-flavour-set/png/screen_rulers_glossy.png";
@@ -45,9 +105,9 @@ angular.module('myApp.controllers', [])
 
     }])
     .controller('MyCtrl1', ['$scope', function ($scope) {
-        $scope.$parent.title = "Maverix Theme";
+        $scope.$parent.title = "Project Manager";
         $scope.$parent.img = "img/iconset-addictive-flavour-set/png/screen_aqua_glossy.png";
-        $scope.$parent.showTopToggle = true;
+        $scope.$parent.showTopToggle = false;
 
     }])
     .controller('MyCtrl2', ['$scope', function ($scope) {

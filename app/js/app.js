@@ -7,9 +7,11 @@ angular.module('myApp', [
     'myApp.filters',
     'myApp.services',
     'myApp.directives',
-    'myApp.controllers'
+    'myApp.controllers',
+    'json-print'
 ]).
     config(['$routeProvider', function ($routeProvider) {
+      $routeProvider.when('/api-test', {templateUrl: 'app/partials/api-test.html', controller: 'ApiTestCtrl'});
         $routeProvider.when('/maverix', {templateUrl: 'app/partials/maverix.html', controller: 'MaverixCtrl'});
         $routeProvider.when('/tables', {templateUrl: 'app/partials/tables.html', controller: 'TablesCtrl'});
         $routeProvider.when('/modals', {templateUrl: 'app/partials/modals.html', controller: 'ModalsCtrl'});
