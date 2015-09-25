@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-  .controller('ApiTestCtrl', ['$scope', '$http', function ($scope, $http) {
+  .controller('ApiTestCtrl', ['$scope', '$http', 'localStorageService', function ($scope, $http, localStorageService) {
     $scope.$parent.title = "API Test";
     $scope.$parent.img = "img/iconset-addictive-flavour-set/png/chart.png";
     $scope.$parent.showTopToggle = false;
@@ -15,7 +15,12 @@ angular.module('myApp.controllers', [])
     $scope.trackedList = {};
     $scope.apiRequest.trackedObjects = [];
 
+    //Fetch any saved user requests from local storage. If not exist, initialize a new array
+    $scope.myRequests = localStorageService.get('savedRequests') || [];
+    console.log("Loading saved requests: " + angular.toJson($scope.myRequests));
+
     $scope.callAPI = function(){
+
       $scope.apiRequest.result = {};
       $scope.apiRequest.trackedObjects = [];
 
@@ -33,6 +38,12 @@ angular.module('myApp.controllers', [])
           // called asynchronously if an error occurs
           // or server returns response with an error status.
         });
+    };
+
+    $scope.saveRequest = function() {
+      $scope.myRequests.push($scope.apiRequest);
+      localStorageService.set('savedRequests', $scope.myRequests);
+      console.log("Requests Saved");
     };
 
     $scope.updateTrackedObject = function(){

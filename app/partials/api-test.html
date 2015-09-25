@@ -16,15 +16,18 @@
               <input type="text" class="form-control" id="txtUrl" name="txtUrl" ng-model="apiRequest.url">
             </div>
           <div class="form-group">
-            <label for="txtTrackedObjects">Tracked Object Path(s)</label>
+            <label for="txtTrackedObjects">Tracked Object Path(s) <span style="font-size: x-small">(separate multiple paths with pipes '|')</span></label>
             <textarea class="form-control" id="txtTrackedObjects" name="txtTrackedObjects"
                       ng-model="trackedList" ng-change="updateTrackedObject()"
                       ng-list="|" >
             </textarea>
             <!--<pre>{{apiRequest.trackedObjects | json}}</pre>-->
           </div>
-          <button class="btn btn-default" data-toggle="modal" ng-click="callAPI()" data-target="#myModal">
-            Run API Test
+          <button class="btn btn-modern btn-lg" data-toggle="modal" ng-click="callAPI()">
+            Send
+          </button>
+          <button class="btn btn-modern btn-lg pull-right" data-toggle="modal" ng-click="saveRequest()">
+            Save
           </button>
         </ng-form>
       </div>
@@ -32,9 +35,9 @@
 
     <div class="col-lg-6">
       <div class="well">
-        <h2>Results:</h2>
+        <h2>Result:</h2>
         <p>Request: {{apiRequest.type}} | Status: {{apiRequest.status}}</p>
-        <p>Tracked Object:</p>
+        <h3>Tracked Objects:</h3>
         <div>
           <table class="table table-striped table-hover">
             <thead>
@@ -49,8 +52,8 @@
             </tr>
           </table>
         </div>
-        <p>Response:</p>
-        <pre json-print="apiRequest.result"></pre>
+        <h3>Response:</h3>
+        <pre>{{apiRequest.result | json}}</pre>
       </div>
     </div>
 
